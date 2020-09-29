@@ -12,3 +12,5 @@ staff/*
 grid-yard/*
 
 uploads/logs/*
+
+application/components/ENV_storage.php

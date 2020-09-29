@@ -1,0 +1,48 @@
+[19-Sep-2020 09:35:28 Europe/Kiev] PHP Fatal error:  Uncaught Error: Call to undefined function posix_kill() in D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php:372
+Stack trace:
+#0 D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php(32): isDaemonActive('D:\\OpenServer\\O...')
+#1 D:\OpenServer\OSPanel\domains\GridYardCI\application\controllers\tools\TestController.php(96): require_once('D:\\OpenServer\\O...')
+#2 D:\OpenServer\OSPanel\domains\GridYardCI\system\core\CodeIgniter.php(360): TestController->test_daemon()
+#3 D:\OpenServer\OSPanel\domains\GridYardCI\index.php(220): require_once('D:\\OpenServer\\O...')
+#4 {main}
+  thrown in D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php on line 372
+[19-Sep-2020 09:51:05 Europe/Kiev] PHP Fatal error:  Uncaught Error: Call to undefined function posix_kill() in D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php:372
+Stack trace:
+#0 D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php(32): isDaemonActive('D:\\OpenServer\\O...')
+#1 D:\OpenServer\OSPanel\domains\GridYardCI\application\controllers\tools\TestController.php(96): require_once('D:\\OpenServer\\O...')
+#2 D:\OpenServer\OSPanel\domains\GridYardCI\system\core\CodeIgniter.php(360): TestController->test_daemon()
+#3 D:\OpenServer\OSPanel\domains\GridYardCI\index.php(220): require_once('D:\\OpenServer\\O...')
+#4 {main}
+  thrown in D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php on line 372
+[19-Sep-2020 09:52:55 Europe/Kiev] PHP Fatal error:  Uncaught Error: Call to undefined function posix_kill() in D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php:372
+Stack trace:
+#0 D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php(32): isDaemonActive('D:\\OpenServer\\O...')
+#1 D:\OpenServer\OSPanel\domains\GridYardCI\application\controllers\tools\TestController.php(96): require_once('D:\\OpenServer\\O...')
+#2 D:\OpenServer\OSPanel\domains\GridYardCI\system\core\CodeIgniter.php(360): TestController->test_daemon()
+#3 D:\OpenServer\OSPanel\domains\GridYardCI\index.php(220): require_once('D:\\OpenServer\\O...')
+#4 {main}
+  thrown in D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php on line 372
+[19-Sep-2020 09:54:44 Europe/Kiev] PHP Fatal error:  Uncaught Error: Call to undefined function posix_kill() in D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php:372
+Stack trace:
+#0 D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php(32): isDaemonActive('D:\\OpenServer\\O...')
+#1 D:\OpenServer\OSPanel\domains\GridYardCI\application\controllers\tools\TestController.php(96): require_once('D:\\OpenServer\\O...')
+#2 D:\OpenServer\OSPanel\domains\GridYardCI\system\core\CodeIgniter.php(360): TestController->test_daemon()
+#3 D:\OpenServer\OSPanel\domains\GridYardCI\index.php(220): require_once('D:\\OpenServer\\O...')
+#4 {main}
+  thrown in D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php on line 372
+[19-Sep-2020 10:12:41 Europe/Kiev] PHP Fatal error:  Uncaught Error: Call to undefined function posix_kill() in D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php:372
+Stack trace:
+#0 D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php(32): isDaemonActive('D:\\OpenServer\\O...')
+#1 D:\OpenServer\OSPanel\domains\GridYardCI\application\controllers\tools\TestController.php(96): require_once('D:\\OpenServer\\O...')
+#2 D:\OpenServer\OSPanel\domains\GridYardCI\system\core\CodeIgniter.php(360): TestController->test_daemon()
+#3 D:\OpenServer\OSPanel\domains\GridYardCI\index.php(220): require_once('D:\\OpenServer\\O...')
+#4 {main}
+  thrown in D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php on line 372
+[19-Sep-2020 10:41:32 Europe/Kiev] PHP Fatal error:  Uncaught Error: Call to undefined function posix_kill() in D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php:372
+Stack trace:
+#0 D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php(32): isDaemonActive('D:\\OpenServer\\O...')
+#1 D:\OpenServer\OSPanel\domains\GridYardCI\application\controllers\tools\TestController.php(96): require_once('D:\\OpenServer\\O...')
+#2 D:\OpenServer\OSPanel\domains\GridYardCI\system\core\CodeIgniter.php(360): TestController->test_daemon()
+#3 D:\OpenServer\OSPanel\domains\GridYardCI\index.php(220): require_once('D:\\OpenServer\\O...')
+#4 {main}
+  thrown in D:\OpenServer\OSPanel\domains\GridYardCI\application\third_party\web_socket\echows.php on line 372

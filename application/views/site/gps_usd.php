@@ -117,7 +117,7 @@
                                     <div v-if="buy_errors">
                                         <p v-for="error in buy_errors" class="alert alert-warning">{{error}}</p>
                                     </div>
-                                    <input type='button' class="btn btn-primary mt-4 btn-block" value='Купить GPS' id='click2'>
+                                    <button type='button' v-on:click="buy_ask()" class="btn btn-primary mt-4 btn-block" >Купить GPS</button>
                                 </div>
 													</div>
 													<div class="tab-pane " id="sell">
@@ -151,7 +151,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type='button' class="btn btn-danger mt-4 btn-block" value='Продать GPS' id='click2'>
+                                    <button type='button' v-on:click="sell_ask()" class="btn btn-danger mt-4 btn-block" >11Продать GPS</button>
                                 </div>
 													</div>
 												</div>
@@ -216,17 +216,16 @@ var app = new Vue({
             this.buy_tok = this.buy_usd / this.tok2_price
         },
         
-        buy_tok_ask(){
-            if(this.buy_tok.bal_tok >=1){return;}
+        buy_ask(){
+          //  if(this.buy_tok.bal_tok >=1){return;}
             Swal.fire({
                     title: ``,
-                    html: `<h3><?=lang('txt165_23')?></h3>`,
+                    html: `<h3>Купить GPS ?</h3>`,
                     showCancelButton: true,
                     confirmButtonText: '<?=lang('txt103')?>',
                     cancelButtonText: '<?=lang('txt104')?>',
                 }).then((result) => {
                     if (result.value) {
-                        //$('#buy_tok_form').submit();
                         this.buy_send()
                     }
                 })
@@ -239,9 +238,8 @@ var app = new Vue({
                 html: `<h3><?=lang('txt105')?> </h3>`,
                 showConfirmButton: false,
             })
-            let res = await request('operations/OrderController/buy_tok', 'POST', {
-                buy_tok: this.buy_tok.tok_sum,
-                buy_price: this.buy_tok.tok_price,
+            let res = await request('operations/OrderController/buy_tok2_order', 'POST', {
+                buy_tok:this.buy_tok, buy_price:this.tok2_price, 
             })
             //console.log(res)
             if (res.errors) {

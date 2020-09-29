@@ -50,7 +50,7 @@ class order_api_serv extends CI_Model
 			$res['buy_errors'][] = $validate_order['error'];
 		}
 		$user_orders_sum = $this->db->select_sum('tok_sum')->where([
-			'type'=>'main',
+			'type'=>'tok2',
 			'sell_price'=>$tok_price,
 			'status'=>'open',
 			])->get('orders')->row_array()['tok_sum'];

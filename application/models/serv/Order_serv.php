@@ -133,7 +133,7 @@ class order_serv extends CI_Model
         return $up_sell_stage;
 	}
 	
-	public function buy_from_users($buy_tok, $buy_price)
+	public function buy_from_users($buy_tok, $buy_price, $type='main')
     {
 		//ишем пользовательские ордера для покупки по текущему курсу из них
 		$user_orders = $this->db->where([
@@ -184,6 +184,8 @@ class order_serv extends CI_Model
 		}
 		return $buy_tok;
 	}
+
+	
 
 	public function buy_from_stage($buy_tok, $buy_stage)
     {

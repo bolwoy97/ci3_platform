@@ -12,16 +12,41 @@ class SeedTok2Controller extends CI_Controller {
 	{
 		///tools/SeedTok2Controller/add_stages
 		$stages = array();
-		$stages[] = [
-			'price'=>1,
-			'max_tok'=>25000,
-			'stage_tok'=>25000
-		];
-		for ($i=1.01; $i < 20 ; $i+=0.01) { 
+		
+		for ($i=0.1; $i < 0.2; $i+=0.01) { 
+			$max_tok = 4000/$i;
+			$stage_tok = $max_tok;
 			$stages[] = [
 				'price'=>$i,
-				'max_tok'=>500,
-				'stage_tok'=>500
+				'max_tok'=>round($max_tok),
+				'stage_tok'=>round($stage_tok)
+			];
+		}
+		for ($i=0.2; $i < 0.3; $i+=0.01) { 
+			$max_tok = 2000/$i;
+			$stage_tok = $max_tok;
+			$stages[] = [
+				'price'=>$i,
+				'max_tok'=>round($max_tok),
+				'stage_tok'=>round($stage_tok)
+			];
+		}
+		for ($i=0.3; $i < 0.5; $i+=0.01) { 
+			$max_tok = 1000/$i;
+			$stage_tok = $max_tok/100*10;
+			$stages[] = [
+				'price'=>$i,
+				'max_tok'=>round($max_tok),
+				'stage_tok'=>round($stage_tok)
+			];
+		}
+		for ($i=0.5; $i < 1.0; $i+=0.01) { 
+			$max_tok = 700/$i;
+			$stage_tok = $max_tok/100*10;
+			$stages[] = [
+				'price'=>$i,
+				'max_tok'=>round($max_tok),
+				'stage_tok'=>round($stage_tok)
 			];
 		}
 
@@ -34,7 +59,7 @@ class SeedTok2Controller extends CI_Controller {
 
 
 	public function revent_orders_system_test()
-	{
+	{///tools/SeedTok2Controller/revent_orders_system_test
 		//return;
 		/*$this->db->query('DELETE FROM `orders` WHERE 1');
 		$this->db->query("DELETE FROM `operations` WHERE type NOT LIKE 'add_%'");*/

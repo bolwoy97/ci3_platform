@@ -12,6 +12,6 @@ staff/*
 grid-yard/*
 
 uploads/logs/*
-!uploads/logs/
+!uploads/logs/.gitkeep 
 
 application/components/ENV_storage.php

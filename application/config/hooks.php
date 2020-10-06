@@ -9,6 +9,14 @@
 |	http://codeigniter.com/user_guide/general/hooks.html
 |
 */
+/*$hook['pre_system'][] = array(
+    'class'    => 'Settings',
+    'function' => 'ini_settings',
+    'filename' => 'Settings.php',
+    'filepath' => 'hooks',
+    //'params'   => array('beer', 'wine', 'snacks')
+    );*/
+
 $hook['pre_system'][] = array(
     'class'    => 'Settings',
     'function' => 'set_gc_rules',

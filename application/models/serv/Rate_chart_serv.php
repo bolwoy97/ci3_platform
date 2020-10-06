@@ -246,12 +246,13 @@ class rate_chart_serv extends CI_Model
 	}
 
 
-	public function gen_ApexChart()
+	public function gen_ApexChart($rates_tab='rates',$tok_price)
     {
 		$res = array();
-		$rates = $this->db->order_by('date', 'asc')->get('rates')->result_array();
+		$rates = $this->db->order_by('date', 'asc')->get($rates_tab)->result_array();
 		$time_unit = 60*60*24;
-		$tok_price = $this->db->get_where('options', ['name'=>'tok_price'])->row_array()['value'];
+		
+		//$tok_price = $this->db->get_where('options', ['name'=>'tok_price'])->row_array()['value'];
 		$dtime = date("Y-m-d H:i:s");
 
 		$rates[] = ['date'=>$dtime, 'price'=>$tok_price];

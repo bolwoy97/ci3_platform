@@ -29,3 +29,26 @@
   document.body.removeChild(el);
 };
 </script>
+
+<!--
+<a style='
+-webkit-font-smoothing: antialiased;
+-webkit-tap-highlight-color: transparent;
+font-feature-settings: "liga" 0;
+box-sizing: border-box;
+text-decoration: none;
+background-color: transparent;
+position: fixed;
+bottom: 20px;
+right: 100px;
+text-align: center;
+z-index: 10000;
+height: 50px;
+width: 200px;
+background-repeat: no-repeat;
+background-position: center;
+-webkit-transition: background-color 0.1s linear;
+border-radius: 3px;
+background-image: linear-gradient(to right, #006fff   0%, #006fff  100%);
+color: #fff;
+display: inline;'><?// echo $this->benchmark->memory_usage();?></a>-->

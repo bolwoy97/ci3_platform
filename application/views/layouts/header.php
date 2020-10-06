@@ -42,7 +42,7 @@
                             </a>
                         </div>
                     </div>
-
+                    
                     <!-- FULL-SCREEN -->
                     <div class="dropdown d-md-flex notifications">
                         <a class="nav-link icon" data-toggle="dropdown">

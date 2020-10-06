@@ -109,29 +109,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <!--<div class="pagination-wrapper">
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination mb-4 ml-5">
-                                        <li class="page-item">
-                                            <a aria-label="Next" class="page-link" href="#"><i
-                                                    class="fa fa-angle-left"></i></a>
-                                        </li>
-                                        <li class="page-item active">
-                                            <a class="page-link" href="#">1</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">2</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">3</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a aria-label="Next" class="page-link" href="#"><i
-                                                    class="fa fa-angle-right"></i></a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>-->
+                            
                         </div>
                         <div class="tab-pane " id="tab6">
                             <div class="table-responsive content vscroll h-600">
@@ -158,29 +136,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <!--<div class="pagination-wrapper">
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination mb-4 ml-5">
-                                        <li class="page-item">
-                                            <a aria-label="Next" class="page-link" href="#"><i
-                                                    class="fa fa-angle-left"></i></a>
-                                        </li>
-                                        <li class="page-item active">
-                                            <a class="page-link" href="#">1</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">2</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">3</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a aria-label="Next" class="page-link" href="#"><i
-                                                    class="fa fa-angle-right"></i></a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>-->
+                           
                         </div>
                         <div class="tab-pane " id="tab7">
                             <div class="table-responsive content vscroll h-600">
@@ -216,29 +172,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <!--<div class="pagination-wrapper">
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination mb-4 ml-5">
-                                        <li class="page-item">
-                                            <a aria-label="Next" class="page-link" href="#"><i
-                                                    class="fa fa-angle-left"></i></a>
-                                        </li>
-                                        <li class="page-item active">
-                                            <a class="page-link" href="#">1</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">2</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">3</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a aria-label="Next" class="page-link" href="#"><i
-                                                    class="fa fa-angle-right"></i></a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>-->
+                            
                         </div>
                     </div>
                 </div>
@@ -705,7 +639,7 @@ new Vue({
     </script>
 <?}else{?>
     <script>
-    function rate_chart() {
+    /*function rate_chart() {
         $.getJSON("uploads/json/rate_chart.json", function(data) {
             //console.log(data)
             build_chart(data)
@@ -713,7 +647,7 @@ new Vue({
     }
     $(document).ready(function() {
         rate_chart()
-    });
+    });*/
     </script>
 <?}?>
 

@@ -42,9 +42,11 @@ class order_api_serv extends CI_Model
 
 	public function buy_order_tok2_info($user, $rec, $tok_price)
 	{
+		
 		$this->load->model('serv/order_serv');
-		$res = array();
+		$res = array('buy_errors'=>[]);
 		$res['buy_stage'] = $this->db->get_where('stages_tok2',['price'=>$tok_price])->row_array();
+		//echo json_encode(['rate'=>$tok_price]);exit;
 		$validate_order = $this->order_serv->validate_buy_tok2_order($rec, $user, $tok_price, $res['buy_stage']);
 		if(isset($validate_order['error'])) {
 			$res['buy_errors'][] = $validate_order['error'];
@@ -58,11 +60,32 @@ class order_api_serv extends CI_Model
 		return $res;
 	}
 
+	public function sell_order_tok2_info($user, $rec, $tok2_price)
+	{
+		$this->load->model('serv/order_serv');
+		$res = array('sell_errors'=>[]);
+		if($rec['sell_price']<=0){
+			$res['sell_errors'][] = lang('txt191')." > 0 ";
+		}else{
+		}
+		$this->load->model('stage_mod');
+		$sell_stage = $this->stage_mod->find_or_fill_tok2($rec['sell_price'], $tok2_price);
+		$sell_stage['tok_left'] = $sell_stage['max_tok'] - $sell_stage['cur_tok'];
+		$validate_order = $this->order_serv->validate_sell_tok2_order($rec, $user, $tok2_price, $sell_stage);
+		if(isset($validate_order['error'])) {
+			$res['sell_errors'][] = $validate_order['error'];
+		}
+		
+		$res['sell_stage'] = $sell_stage;
+
+		return $res;
+	}
+
 
 	public function get_orders($rec)
 	{
 		//$rec = json_decode(file_get_contents('php://input'), true);
-		$res = $this->db->order_by('buy_date', 'desc')->get('orders',$rec['orders_list_lim'])->result_array();
+		$res = $this->db->where_in('type',['main'])->order_by('buy_date', 'desc')->get('orders',$rec['orders_list_lim'])->result_array();
 		return $res;
 	}
 

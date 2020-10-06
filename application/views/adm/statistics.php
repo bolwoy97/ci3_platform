@@ -90,8 +90,12 @@
                                             </tr>
 
                                             <tr>
-                                                <td>Total stage token</td>
+                                                <td>Total stage YRD cost</td>
                                                 <td><?=$stage_tok_usd_sum?>$</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total stage YRD </td>
+                                                <td><?=$stage_tok_sum?> YRD</td>
                                             </tr>
 
                                             <tr>

@@ -30,6 +30,8 @@ class stage_mod extends MY_Model
 			}
 		return $sell_stage;
 	}
+
+	
 	
 	public function check_close_stage($buy_stage)
     {
@@ -53,6 +55,82 @@ class stage_mod extends MY_Model
 			}
 		}
 
+	}
+
+	public function check_close_tok2_stage($buy_stage)
+    {
+		$buy_stage = $this->db->get_where('stages_tok2',['price'=>$buy_stage['price']])->row_array();
+		//проверка на закрытие текушего этапа покупки
+		$user_orders = $this->db->where([
+			'type'=>'tok2',
+			'sell_price'=>$buy_stage['price'],
+			'status'=>'open',
+			])->get('orders')->result_array();
+		if(count($user_orders)<=0 && $buy_stage['stage_tok']<=0){
+			$dtime = date("Y-m-d H:i:s");
+			$this->db->where('id', $buy_stage['id'])->update('stages_tok2', ['end_date'=> $dtime]);
+			if( $buy_stage['price'] < 1 ){
+				$next_price = round($buy_stage['price']+0.01,4);
+			}else{
+				$next_price = round($buy_stage['price']/100*101,4);
+			}
+			//log_message('error', " next_price ".$next_price);
+			$next_buy_stage = $this->get_or_create_tok2($next_price);
+			$this->db->where('cur', 'tok2')->update('courses', ['sum_usd'=> $next_buy_stage['price']]);
+			
+			$rates = ['date'=>$dtime,'price'=>$next_price];
+			$this->db->insert('rates_tok2', $rates);
+		}
+
+	}
+
+	public function find_or_fill_tok2($price,$tok2_price)
+    {
+		$up_tok2_price = round($tok2_price+$tok2_price/100*$GLOBALS['env']['sell_price_min_profit'],2);
+		$cur_p = max([0.3, $up_tok2_price]);
+		$sell_stage = $this->get_or_create_tok2($cur_p);
+
+		while($cur_p<$price || $sell_stage['max_tok']-$sell_stage['cur_tok'] <=0 ){
+			if($cur_p<1){
+				$next_price = round($cur_p+0.01,4);
+			}else{
+				$next_price = round($cur_p/100*101,4);
+			}
+			$sell_stage = $this->get_or_create_tok2($next_price);
+			$cur_p = $sell_stage['price'];
+		}
+		return $sell_stage;
+	}
+
+	public function get_or_create_tok2($price)
+    {
+		/* с 1$ до бесконечности
+		до 1$ создается в seedController
+		*/
+        $sell_stage = $this->db->get_where('stages_tok2',['price'=>$price])->row_array();
+			if(empty($sell_stage)){ //если нет этапа - создаем
+				$max_tok = 300/$price;
+				$stage_tok = $max_tok/100*10;
+				$insert_stage = [
+					'price'=>$price,
+					'max_tok'=>$max_tok,
+					'stage_tok'=>$stage_tok,
+					'max_stage_tok'=>$stage_tok,
+					'cur_tok'=>0,
+				];
+				if($this->db->insert('stages_tok2',$insert_stage)){
+					$sell_stage = $insert_stage;
+				}
+			}
+		return $sell_stage;
+	}
+
+	public function get_sell_tok($stages)
+    {
+		foreach ($stages as $k => $stage) {
+			$stages[$k]['sell_tok'] = $stage['cur_tok'] + $stage['stage_tok'];
+		}
+		return $stages;
 	}
 
 }

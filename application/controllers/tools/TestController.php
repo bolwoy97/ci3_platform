@@ -101,4 +101,11 @@ class TestController extends CI_Controller {
 	{///tools/TestController/profiler
 		$this->load->view('test/profiler');
 	}
+	
+	public function settings()
+	{///tools/TestController/settings
+		echo 'memory_limit = ', ini_get('memory_limit'), '<br>';
+		echo 'max_execution_time  = ', ini_get('max_execution_time'), '<br>';
+		echo 'max_input_time  = ', ini_get('max_input_time'), '<br>';
+	}
 }

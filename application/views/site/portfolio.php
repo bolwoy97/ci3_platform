@@ -29,7 +29,7 @@
                                                 <td><?=$token['reserved']?></td>
                                                 <td><?=$token['total']?></td>
                                                 <td><?=$token['price']?></td>
-                                                <td>$<?=$token['cost']?></td>
+                                                <td>$ <?=$token['cost']?></td>
                                                 
                                             </tr>
                                         <?}?>

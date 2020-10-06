@@ -15,4 +15,10 @@ class Settings
         ini_set( 'session.gc_divisor',      100 );
     }
 
+    public function ini_settings(){   
+        ini_set('memory_limit', '256M');
+        ini_set( 'max_execution_time',300 );
+        ini_set( 'max_input_time', 600 );
+    }
+
 }

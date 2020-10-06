@@ -337,6 +337,27 @@ $lang = array(
     'txt210' => 'Reserved',
     'txt211' => 'Total',
     'txt212' => 'Cost',
-    'txt213'=>'Portfolio',
+    'txt213' => 'Portfolio',
+
+    'txt214'=>'Rate',
+
+    'txt215' => 'Order',
+    'txt216' => 'Quantity',
+    'txt217' => 'Sell',
+    'txt218' => 'Current buy price',
+    'txt219' => 'GPS available for purchase at current price',
+    'txt220' => 'The amount of GPS that will be bought',
+    'txt221' => 'Amount excluding 5% purchase fee',
+    'txt222' => 'Current balance for purchase',
+    'txt223' => "The price must be confirmed in the 'Affordable price' field",
+    'txt224' => 'The price at which a sell order can be placed, taking into account its GPS quantity',
+    'txt225' => 'GPS quantity for which the order will be opened',
+    'txt226' => 'Number of GPS that can be placed for sale at an affordable price',
+    'txt227' => 'Amount excluding 10% fee for order closing',
+    'txt228' => 'Available volume',
+    'txt229' => "Your status does not provide access to this market.
+    To change your status, increase your YRD capital to 1YRD on the 'Wallet' page. ",
+
+    
     
 );

@@ -20,7 +20,7 @@ class HomeController extends MY_Controller {
 
 	public function index()
 	{
-		//log_message('error', 'teeeest');
+		//log_message('error', 'test');
 		//$this->load->model('serv/rate_chart_serv');
 		//$this->rate_chart_serv->update_xml_if_need();
 		
@@ -31,9 +31,9 @@ class HomeController extends MY_Controller {
 
 	public function gps_usd()
 	{
+		$this->load->view('site/gps_usd',$this->res);return;
 		if($this->user['is_tester']>=1){
-			$this->session->set_flashdata('warning',['Tester version']);
-			$this->load->view('site/gps_usd',$this->res);return;
+			//$this->session->set_flashdata('warning',['Tester version']);
 		}
 		$this->load->view('site/gps_usd_old',$this->res);
 
@@ -44,9 +44,9 @@ class HomeController extends MY_Controller {
 		$this->res['tok_price'] = $this->db->get_where('options',['name'=>'tok_price'])->row_array()['value'];
 
 
-		$this->res['operations'] = $this->db->like('type', 'add_')
+		$this->res['operations'] = $this->db->like('type', 'add_')->order_by('date', 'desc')
 		->get_where('operations',['user'=>$this->user['id']])->result_array();
-		$this->res['withdrawals'] = $this->db->where(['user'=>$this->user['id'],'status >'=>0])->where_in('type',['with','trans'])->get('operations')->result_array();
+		$this->res['withdrawals'] = $this->db->where(['user'=>$this->user['id'],'status >'=>0])->where_in('type',['with','trans'])->order_by('date', 'desc')->get('operations')->result_array();
 		$this->load->model('serv/oper_serv');
 		$this->res['withdrawals'] = $this->oper_serv->get_statuses($this->res['withdrawals']);
 		$this->load->view('site/wallet',$this->res);
@@ -92,6 +92,9 @@ class HomeController extends MY_Controller {
 			'yrd'=>[
 				'symbol'=>'YRD', 'name'=>'Yard Token', 'available'=>0, 'reserved'=>0, 'total'=>0, 'price'=>0, 'cost'=>0,
 			],
+			'gps'=>[
+				'symbol'=>'GPS', 'name'=>'Gridpay Share', 'available'=>0, 'reserved'=>0, 'total'=>0, 'price'=>0, 'cost'=>0,
+			],
 		];
 		$tokens['yrd']['price'] = $this->db->get_where('options', ['name'=>'tok_price'])->row_array()['value'];
 		$tokens['yrd']['reserved'] = $this->db->select_sum('tok_sum')->where([
@@ -100,7 +103,17 @@ class HomeController extends MY_Controller {
 			'type'=>'main',
 			])->get('orders')->row_array()['tok_sum'];
 		$tokens['yrd']['total']	= $tokens['yrd']['reserved'];
-
+		//=========>
+		$tokens['gps']['price'] = $this->db->get_where('courses', ['cur'=>'tok2'])->row_array()['sum_usd'];
+		$tokens['gps']['available'] = $this->user['bal_tok2'];
+		
+		$tokens['gps']['reserved'] = 0+ $this->db->select_sum('buy_tok')->where([
+			'user'=>$this->user['id'], 
+			'status'=>'open',
+			'type'=>'tok2',
+			])->get('orders')->row_array()['buy_tok'];
+		$tokens['gps']['total'] = $this->user['bal_tok2'] + $tokens['gps']['reserved'];
+		//=========>
 		foreach ($tokens as $key => $token) {
 			$tokens[$key]['cost'] = round($token['total']*$token['price'],2);
 		}

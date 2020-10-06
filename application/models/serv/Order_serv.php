@@ -84,20 +84,20 @@ class order_serv extends CI_Model
 	public function validate_buy_tok2_order($rec, $user, $tok_price, $buy_stage)
     {
         try {
-			if($rec['buy_tok']>5000){
-				throw new Exception(lang('txt189')." 5000 GPS", 1);
+			if($user['info']['tok_bal']<1){
+				throw new Exception(lang('txt229'), 1);
 			}
 			if($rec['buy_tok']<= 0){
 				throw new Exception(lang('txt190')." 0 GPS ", 1);
 			}
 
 			if($rec['buy_price']!=$buy_stage['price']){
-				throw new Exception(lang('txt192'), 1);
+				throw new Exception(lang('txt192')." {$rec['buy_price']} - {$buy_stage['price']}", 1);
 			}
 			
 			$buy_usd = $rec['buy_tok']*$buy_stage['price'];
-			if($buy_usd< 100){
-				throw new Exception(lang('txt190')." 100$ ", 1);
+			if($buy_usd< 1){
+				throw new Exception(lang('txt190')." 1$ ", 1);
 			}
 			$buy_usd_adn_fee = $buy_usd + $buy_usd/100 * $GLOBALS['env']['order_open_fee'];
 			if($user['bal_usd']< $buy_usd_adn_fee ){
@@ -111,6 +111,40 @@ class order_serv extends CI_Model
         return true;
 	}
 	
+	public function validate_sell_tok2_order($rec, $user, $tok_price, $sell_stage)
+    {
+        try {
+			
+			if($rec['sell_tok']<=0){
+				throw new Exception(lang('txt190')." 0 ", 1);
+			}
+
+			if($user['bal_tok2']< $rec['sell_tok'] ){
+				throw new Exception(lang('txt193'), 1);
+			}
+			
+			/*$up_tok_price = round($tok_price+$tok_price/100*$GLOBALS['env']['sell_price_min_profit'],2);
+			$min_sell_price = max([0.3, $up_tok_price]);
+			if($rec['sell_price']<$min_sell_price ){
+				throw new Exception(lang('txt191')." >= $min_sell_price USD ", 1);
+			}*/
+			$min_sell_price = $sell_stage['price'];
+			if($rec['sell_price'] != $min_sell_price) {
+				//$res['errors'][] = "Ближайшая доступная цена продажи = $".$sell_stage['price'];
+				throw new Exception(lang('txt191')." >= $min_sell_price USD ", 1);
+			}
+
+			//можно ли еще добавить ордер в этот этап на продажу
+			$limit_tok = round($sell_stage['max_tok']-$sell_stage['cur_tok'],3);
+			if($limit_tok<$rec['sell_tok']){
+				throw new Exception(lang('txt195')." {$sell_stage['price']} ".lang('txt196')." $limit_tok YRD", 1);
+			}
+
+		} catch (\Throwable $th) {
+			return ['error' => $th->getMessage()];
+        }
+        return true;
+	}
 
 
     public function get_up_sell_stage($rec, $tok_price)
@@ -137,7 +171,7 @@ class order_serv extends CI_Model
     {
 		//ишем пользовательские ордера для покупки по текущему курсу из них
 		$user_orders = $this->db->where([
-			'type'=>'main',
+			'type'=>$type,
 			'sell_price'=>$buy_price,
 			'status'=>'open',
 			])->get('orders')->result_array();
@@ -165,13 +199,14 @@ class order_serv extends CI_Model
 						'date' => $dtime,
 						'sum' => $order['sell_usd'],
 						'cur' => 'usd',
+						'detail' => $order['type'],
 					);
 					$this->db->insert('operations', $data);
 
 					$operation = array(
 						'type' => 'fee_ord_close' ,'user' => $order_owner['id'],'date' => $dtime,
 						'sum' => $order['sell_usd']/(100-$GLOBALS['env']['order_close_fee'])*$GLOBALS['env']['order_close_fee'],
-						'cur' => 'usd','rate' => $GLOBALS['env']['order_close_fee'],'adr' => $order['id'],
+						'cur' => 'usd','rate' => $GLOBALS['env']['order_close_fee'],'detail'=> $order['type'] , 'adr' => $order['id'],
 					);
 					$this->db->insert('operations', $operation);
 					
@@ -187,7 +222,7 @@ class order_serv extends CI_Model
 
 	
 
-	public function buy_from_stage($buy_tok, $buy_stage)
+	public function buy_from_stage($buy_tok, $buy_stage, $table='stages')
     {
 		if($buy_tok>0 && $buy_stage['stage_tok']>0){
 			if($buy_stage['stage_tok']>$buy_tok){
@@ -204,10 +239,11 @@ class order_serv extends CI_Model
 					'sum' => $buy_stage['max_stage_tok'],
 					'cur' => 'tok',
 					'rate' => $buy_stage['price'],
+					'detail' => $table,
 				);
 				$this->db->insert('operations', $data);
 			}
-			$this->db->where('id', $buy_stage['id'])->update('stages', ['stage_tok'=> $buy_stage['stage_tok']]);
+			$this->db->where('id', $buy_stage['id'])->update($table, ['stage_tok'=> $buy_stage['stage_tok']]);
 			
 		}
 		return $buy_tok;

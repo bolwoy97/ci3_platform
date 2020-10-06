@@ -12,7 +12,7 @@ class OrderController extends CI_Controller {
 
 	///operations/OrderController/
 
-	public function buy_order_info()
+	/*public function buy_order_info()
 	{
 		$rec = json_decode(file_get_contents('php://input'), true);
 		$user = $this->auth_serv->loged_in(true,true);
@@ -39,7 +39,7 @@ class OrderController extends CI_Controller {
 		$res['sell_stage'] = $this->order_serv->get_up_sell_stage($rec, $tok_price);
 		
 		echo json_encode($res);
-	}
+	}*/
 
 	public function buy_order()
 	{
@@ -58,7 +58,7 @@ class OrderController extends CI_Controller {
 		}
 
 		if(isset($res['errors'])){
-			echo json_encode($res);exit;
+			echo json_encode($res);return;
 		}
 
 		//$buy_stage = $this->db->get_where('stages',['price'=>$tok_price])->row_array();
@@ -99,7 +99,7 @@ class OrderController extends CI_Controller {
 			$operation = array(
 				'type' => 'ord_open' ,'user' => $user['id'],'date' => $dtime,
 				'sum' => $buy_tok,'cur' => 'tok','rate' => $buy_stage['price'],
-				'detail' => $sell_stage['price'],'adr' => $this->db->insert_id(),
+				'detail' => $sell_stage['price'],'adr' => $order['id'],
 			);
 			$this->db->insert('operations', $operation);
 
@@ -150,32 +150,37 @@ class OrderController extends CI_Controller {
 		
 		/*redirect(base_url().'home');exit;
 		print_r($res);exit;*/
-		echo json_encode($res);exit;
+		echo json_encode($res);return;
 	}
 
 	public function buy_tok2_order()
 	{
 		$this->load->model('stage_mod');
-
+		$res = array();
 		$dtime = date("Y-m-d H:i:s");
 		$rec = json_decode(file_get_contents('php://input'), true);//$_POST;//
-		$user = $this->auth_serv->loged_in(true,true);
-		$tok2_price = $this->db->get_where('courses', ['cur'=>'tok2'])->row_array()['sum_usd'];
-		$res = array();
+		//$user = $this->auth_serv->loged_in(true,true);
+		$user = $this->auth_serv->loged_in(true,false);
+		$this->load->model('user_mod');
+		$user = $this->user_mod->get_info($user['id']);
+	
+		//$res['user_tok_bal'] = $user['info']['tok_bal'];
 
-		$buy_stage = $this->db->get_where('stages',['price'=>$tok2_price])->row_array();
+		$tok2_price = $this->db->get_where('courses', ['cur'=>'tok2'])->row_array()['sum_usd'];
+
+
+		$buy_stage = $this->db->get_where('stages_tok2',['price'=>$tok2_price])->row_array();
 		$validate_order = $this->order_serv->validate_buy_tok2_order($rec, $user, $tok2_price, $buy_stage);
 		if(isset($validate_order['error'])) {
 			$res['errors'][] = $validate_order['error'];
 		}
 
 		if(isset($res['errors'])){
-			echo json_encode($res);exit;
+			echo json_encode($res);return;
 		}
-		$res['errors'][] = 'all good';
-		echo json_encode($res);exit;
+		/*$res['errors'][] = 'all good';
+		echo json_encode($res);return;*/
 
-        //$sell_stage = $this->stage_mod->get_or_create($rec['sell_price']);
 		
 		if(!isset($res['errors']) ){
 			//переходим к покупке
@@ -183,40 +188,39 @@ class OrderController extends CI_Controller {
 			$buy_tok = $rec['buy_tok'];
 
 			//ишем пользовательские ордера для покупки по текущему курсу из них
-			$buy_tok = $this->order_serv->buy_from_users($buy_tok, $buy_stage['price']);
+			$buy_tok = $this->order_serv->buy_from_users($buy_tok, $buy_stage['price'], 'tok2');
 		
 			//  ишем корпоративные токены для покупки по текущему курсу из них
-			$buy_tok = $this->order_serv->buy_from_stage($buy_tok, $buy_stage);
+			$buy_tok = $this->order_serv->buy_from_stage($buy_tok, $buy_stage, 'stages_tok2');
 			
 			//проверка на закрытие текушего этапа покупки
-			$this->stage_mod->check_close_stage($buy_stage);
+			$this->stage_mod->check_close_tok2_stage($buy_stage);
 
 			//сколько токена в итоге куплено
 			$buy_tok = $rec['buy_tok']-$buy_tok;
 			$buy_usd = round($buy_tok * $buy_stage['price'],2);
 			$buy_usd_and_fee = round($buy_usd + $buy_usd/100*$GLOBALS['env']['order_open_fee'],2);
-			//$sell_usd = round($buy_tok * $sell_stage['price'] /100*(100 - $GLOBALS['env']['order_close_fee']),2);
 
 			$this->db->set('bal_usd', 'bal_usd-'.$buy_usd_and_fee, FALSE)->where('id', $user['id'])->update('users');
-			$this->db->set('cur_tok', 'cur_tok+'.$buy_tok, FALSE)->where('id', $sell_stage['id'])->update('stages');
+			$this->db->set('bal_tok2', 'bal_tok2+'.$buy_tok, FALSE)->where('id', $user['id'])->update('users');
 
 			$order = array(
-				'user' => $user['id'],'type' => 'main','tok_sum' => $buy_tok,'buy_tok' => $buy_tok ,
-				'buy_price' => $buy_stage['price'] ,'sell_price' => $sell_stage['price'],
-				'buy_date' => $dtime,'buy_usd' => $buy_usd_and_fee,'sell_usd' => $sell_usd,'status' => 'open',
+				'user' => $user['id'],'type' => 'tok2_buy','tok_sum' => $buy_tok,'buy_tok' => $buy_tok ,
+				'buy_price' => $buy_stage['price'], 'sell_price' => $buy_stage['price'] ,
+				'buy_date' => $dtime, 'sell_date' => $dtime, 'buy_usd' => $buy_usd_and_fee, 'sell_usd' => $buy_usd_and_fee, 'status' => 'closed'
 			 );
 			$this->db->insert('orders', $order);
 			$order['id'] = $this->db->insert_id();
 
 			$operation = array(
-				'type' => 'ord_open' ,'user' => $user['id'],'date' => $dtime,
-				'sum' => $buy_tok,'cur' => 'tok','rate' => $buy_stage['price'],
-				'detail' => $sell_stage['price'],'adr' => $this->db->insert_id(),
+				'type' => 'ord_buy_tok2_open' ,'user' => $user['id'],'date' => $dtime,
+				'sum' => $buy_tok,'cur' => 'tok2','rate' => $buy_stage['price'],
+				'detail' => 'tok2_buy','adr' => $order['id'],
 			);
 			$this->db->insert('operations', $operation);
 
 			$operation = array(
-				'type' => 'fee_ord_open' ,'user' => $user['id'],'date' => $dtime,
+				'type' => 'fee_ord_buy_tok2_open' ,'user' => $user['id'],'date' => $dtime,
 				'sum' => $buy_usd/(100-$GLOBALS['env']['order_open_fee'])*$GLOBALS['env']['order_open_fee'],
 				'cur' => 'usd','rate' => $GLOBALS['env']['order_open_fee'],'adr' => $order['id'],
 			);
@@ -236,7 +240,81 @@ class OrderController extends CI_Controller {
 		
 		/*redirect(base_url().'home');exit;
 		print_r($res);exit;*/
-		echo json_encode($res);exit;
+		echo json_encode($res);return;
+	}
+
+	public function sell_tok2_order()
+	{
+		$this->load->model('stage_mod');
+		$dtime = date("Y-m-d H:i:s");
+		$rec = json_decode(file_get_contents('php://input'), true);//$_POST;//
+		//echo json_encode(['success'=>['sell_price'.$rec['sell_price']]]);exit;
+		$user = $this->auth_serv->loged_in(true,true);
+		$tok2_price = $this->db->get_where('courses', ['cur'=>'tok2'])->row_array()['sum_usd'];
+		$res = array();
+
+		if($rec['sell_price']<=0){
+			$res['errors'][] = lang('txt191')." > 0 ";
+		}else{
+			$sell_stage = $this->stage_mod->find_or_fill_tok2($rec['sell_price'],$tok2_price);
+			
+			$validate_order = $this->order_serv->validate_sell_tok2_order($rec, $user, $tok2_price, $sell_stage);
+			if(isset($validate_order['error'])) {
+				$res['errors'][] = $validate_order['error'];
+			}
+		}
+
+		if(isset($res['errors'])){
+			echo json_encode($res);return;
+		}
+		//echo json_encode(['success'=>['test']]);exit;
+		
+		if(!isset($res['errors']) && isset($sell_stage['price']) ){
+			//переходим к покупке
+			
+			$sell_tok = $rec['sell_tok'];
+
+			//сколько токена в итоге куплено
+			$sell_usd = round($sell_tok * $sell_stage['price'] /100*(100 - $GLOBALS['env']['order_close_fee']),2);
+
+			$this->db->set('bal_tok2', 'bal_tok2-'.$sell_tok, FALSE)->where('id', $user['id'])->update('users');
+			$this->db->set('cur_tok', 'cur_tok+'.$sell_tok, FALSE)->where('id', $sell_stage['id'])->update('stages_tok2');
+
+			$order = array(
+				'user' => $user['id'],'type' => 'tok2','tok_sum' => $sell_tok,'buy_tok' => $sell_tok ,
+				'sell_price' => $sell_stage['price'],
+				'buy_date' => $dtime,'sell_usd' => $sell_usd,'status' => 'open',
+			 );
+			$this->db->insert('orders', $order);
+			$order['id'] = $this->db->insert_id();
+
+			$operation = array(
+				'type' => 'ord_tok2_open' ,'user' => $user['id'],'date' => $dtime,
+				'sum' => $sell_tok,'cur' => 'tok2',
+				'detail' => $sell_stage['price'],'adr' => $order['id'],
+			);
+			$this->db->insert('operations', $operation);
+
+			/*$operation = array(
+				'type' => 'fee_ord_open' ,'user' => $user['id'],'date' => $dtime,
+				'sum' => $buy_usd/(100-$GLOBALS['env']['order_open_fee'])*$GLOBALS['env']['order_open_fee'],
+				'cur' => 'usd','rate' => $GLOBALS['env']['order_open_fee'],'adr' => $order['id'],
+			);
+			$this->db->insert('operations', $operation);*/
+			
+			if($sell_tok < $rec['sell_tok']){
+				$res['success'][] = lang('txt184')." {$buy_stage['price']} ".lang('txt185')." $sell_tok YRD";
+			}else{
+				$res['success'][] = lang('txt186');
+			}
+			//$this->session->set_flashdata('success',$res['success']);
+		}else{
+			$res['errors'][] = lang('txt187');
+		}
+		
+		/*redirect(base_url().'home');exit;
+		print_r($res);exit;*/
+		echo json_encode($res);return;
 	}
 
 
@@ -257,9 +335,9 @@ class OrderController extends CI_Controller {
 		}
 
 		/*$res['success'][] = 'test';
-		echo json_encode($res);exit;*/
+		echo json_encode($res);return;*/
 		if(isset($res['errors'])){
-			echo json_encode($res);exit;
+			echo json_encode($res);return;
 		}
 		
 		if(!isset($res['errors']) && isset($buy_stage['price'])  && isset($buy_stage['id'])){
@@ -316,7 +394,7 @@ class OrderController extends CI_Controller {
 			$res['errors'][] = lang('txt187');
 		}
 		
-		echo json_encode($res);exit;
+		echo json_encode($res);return;
 	}
 
 

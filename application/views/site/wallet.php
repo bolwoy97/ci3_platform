@@ -76,7 +76,7 @@
                             <option value="btc">BITCOIN</option>
                             <!--<option value="usdt">USDT (ERC20)</option>
                                 <option value="eth">ETH</option>-->
-                            
+
                         </select>
                     </div>
                     <input type='button' onclick="ask_with();" class="btn btn-danger mt-4 btn-block"
@@ -86,68 +86,45 @@
         </div>
     </div><!-- COL END -->
 
-    <?if(true){?>
+
     <div class="col-md-12 col-lg-4">
         <div class="card">
             <div class="card-body" id="buy_tok">
-                
-                    <div class="form-group has-success">
-                        <label class="form-label" title="<?=lang('txt165_15')?>"><?=lang('txt165_14')?> YRD
-                            <span class=" badge badge-dark badge-pill"> ?</span></label>
-                        <input type="text" class="form-control  " :placeholder="buy_tok.bal_tok" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" title="<?=lang('txt165_16')?>"><?=lang('txt165_17')?>
-                            <span class=" badge badge-dark badge-pill"> ?</span></label>
-                        <input type="text" class="form-control " :placeholder="buy_tok.user_status" readonly>
-                    </div>
-                    <div class="form-group  has-danger">
-                        <label class="form-label" title="<?=lang('txt165_18')?>"><?=lang('txt165_19')?> <span
-                                class=" badge badge-dark badge-pill"> ?</span><span class="badgetext badge badge-pill">
-                                <?=lang('txt165_20')?> <span class=" badge badge-dark badge-pill"
-                                    title="<?=lang('txt165_21')?>"> ?</span></span></label>
-                        <div class="row gutters-xs">
-                            <div class="col-6">
+
+                <div class="form-group has-success">
+                    <label class="form-label" title="<?=lang('txt165_15')?>"><?=lang('txt165_14')?> YRD
+                        <span class=" badge badge-dark badge-pill"> ?</span></label>
+                    <input type="text" class="form-control  " :placeholder="buy_tok.bal_tok" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" title="<?=lang('txt165_16')?>"><?=lang('txt165_17')?>
+                        <span class=" badge badge-dark badge-pill"> ?</span></label>
+                    <input type="text" class="form-control " :placeholder="buy_tok.user_status" readonly>
+                </div>
+                <div class="form-group  has-danger">
+                    <label class="form-label" title="<?=lang('txt165_18')?>"><?=lang('txt165_19')?> <span
+                            class=" badge badge-dark badge-pill"> ?</span><span class="badgetext badge badge-pill">
+                            <?=lang('txt165_20')?> <span class=" badge badge-dark badge-pill"
+                                title="<?=lang('txt165_21')?>"> ?</span></span></label>
+                    <div class="row gutters-xs">
+                        <div class="col-6">
                             <!--  @input="gen_buy_tok_usd_sum()" -->
-                                <input type="number" step="0.01"  min="0.01" class="form-control" placeholder="YRD" 
+                            <input type="number" step="0.01" min="0.01" class="form-control" placeholder="YRD"
                                 v-model="buy_tok.tok_sum" readonly value="">
-                            </div>
-                            <div class="col-6">
-                                <input type="text" class="form-control" v-model="buy_tok.usd_sum" placeholder="0" readonly>
-                            </div>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" v-model="buy_tok.usd_sum" placeholder="0" readonly>
                         </div>
                     </div>
-                    <button type='button' class="btn btn-info mt-4 btn-block" id='click2' 
-                    v-on:click="buy_tok_ask()" :disabled="buy_tok.bal_tok >=1"
-                    ><?=lang('txt165_22')?>
-                        {{buy_tok.tok_price}}$</button>
-                
+                </div>
+                <button type='button' class="btn btn-info mt-4 btn-block" id='click2' v-on:click="buy_tok_ask()"
+                    :disabled="buy_tok.bal_tok >=1"><?=lang('txt165_22')?>
+                    {{buy_tok.tok_price}}$</button>
+
             </div>
         </div>
     </div>
-    <?}else{?>
-    <div class="col-md-12 col-lg-4">
-        <div class="card">
-            <div class="card-body">
-                <div class="form-group has-success">
-                    <label class="form-label"><?=lang('txt141')?> YRD</label>
-                    <input type="text" class="form-control  " placeholder="0" readonly>
-                </div>
-                <div class="form-group">
-                    <label class="form-label"><?=lang('txt142')?> </label>
-                    <input type="text" class="form-control " placeholder="0$">
-                </div>
-                <div class="form-group">
-                    <label class="form-label"><?=lang('txt143')?> </label>
-                    <input type="text" class="form-control " placeholder="0$">
-                </div>
-                <ul class="list-group">
-                    <input type="text" class="form-control  " placeholder="0 ордеров" readonly disabled>
-                </ul>
-            </div>
-        </div>
-    </div><!-- COL END -->
-    <?}?>
+  
 
 </div>
 
@@ -171,12 +148,12 @@
                     <div class="tab-content">
                         <div class="tab-pane active " id="tab5">
                             <div class="table-responsive content vscroll h-600">
-                                <table class="table card-table table-vcenter " >
+                                <table class="table card-table table-vcenter ">
                                     <thead>
                                         <tr>
                                             <th><?=lang('txt120')?></th>
                                             <th><?=lang('txt118')?></th>
-                                            <th><?=lang('txt147')?></th>
+                                            <th><?=lang('txt214')?></th>
                                             <th class="text-right"><?=lang('txt148')?></th>
                                         </tr>
                                     </thead>
@@ -191,7 +168,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                         
+
                         </div>
                         <div class="tab-pane " id="tab6">
                             <div class="table-responsive content vscroll h-600">
@@ -204,23 +181,21 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?foreach ($operations as $key => $rec) {
-													?>
-                                        <tr>
-                                            <td><?=$rec['date']?></td>
-                                            <td><?=strtoupper($rec['cur'])?></td>
-                                            <td class="text-right"><?=$rec['sum']?>$</td>
+                                        <tr v-for="operation in operations">
+                                            <td>{{operation.date}}</td>
+                                            <td><a href="#">{{operation.cur}}</a></td>
+                                            <td class="text-right">{{operation.sum}}$</td>
                                         </tr>
-                                        <?
-												}?>
+                                      
                                     </tbody>
                                 </table>
                             </div>
-                           
+
                         </div>
+                        
                         <div class="tab-pane " id="tab7">
                             <div class="table-responsive content vscroll h-600">
-                                <table class="table card-table table-vcenter ">
+                                <table class="table card-table table-vcenter " >
                                     <thead>
                                         <tr>
                                             <th><?=lang('txt120')?></th>
@@ -230,14 +205,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?foreach ($withdrawals as $key => $with) {?>
-                                        <tr>
-                                            <td><?=$with['date']?></td>
-                                            <td><?=strtoupper($with['cur'])?></td>
-                                            <td><?=$with['sum']?>$</td>
-                                            <td class="text-info text-right"><?=$with['status_show']?></td>
+                                    <tr v-for="withdrawal in withdrawals">
+                                            <td>{{withdrawal.date}}</td>
+                                            <td><a href="#">{{withdrawal.cur}}</a></td>
+                                            <td>{{withdrawal.sum}}$</td>
+                                            <td class="text-right">{{withdrawal.status_show}}</td>
+                                            
                                         </tr>
-                                        <?}?>
+                                       
 
                                     </tbody>
                                 </table>
@@ -267,7 +242,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                         
+
                         </div>
 
                     </div>
@@ -322,10 +297,8 @@ function ask_with() {
         title: ``,
         html: `<h3><?=lang('txt153')?></h3>`,
         showCancelButton: true,
-        confirmButtonText: '<?=lang('
-        txt103 ')?>',
-        cancelButtonText: '<?=lang('
-        txt104 ')?>',
+        confirmButtonText: '<?=lang('txt103')?>',
+        cancelButtonText: '<?=lang('txt104')?>',
     }).then((result) => {
         if (result.value) {
             $('#with_form').submit();
@@ -336,29 +309,29 @@ function ask_with() {
 
 
 <script>
-    
-    
 var app = new Vue({
     el: '#app',
     data() {
         return {
             loading: false,
-            user_bal_usd:0,
-            buy_tok:{
+            user_bal_usd: 0,
+            buy_tok: {
                 bal_tok: 0,
-                user_status:'',
+                user_status: '',
                 tok_price: 0,
-                tok_sum:'',
-                usd_sum:0,
-                buy_fee:0,
+                tok_sum: '',
+                usd_sum: 0,
+                buy_fee: 0,
             },
 
-            buy_tok_orders:{},
+            buy_tok_orders: {},
             ref_opers: {},
+            operations: {},
+            withdrawals: {},
         }
     },
     methods: {
-        async  update(){
+        async update() {
             if (this.loading) {
                 return
             }
@@ -367,7 +340,7 @@ var app = new Vue({
 
             })
             //console.log(res)
-            
+
             this.buy_tok.tok_price = res.tok_price
             this.buy_tok.bal_tok = res.user_tok_bal
             this.buy_tok.user_status = res.user_status
@@ -375,32 +348,37 @@ var app = new Vue({
             this.buy_tok_orders = res.buy_tok_orders
             this.buy_tok.buy_fee = res.buy_tok.buy_fee
             this.ref_opers = res.ref_opers
+            this.operations = res.operations
+            this.withdrawals = res.withdrawals
 
             this.loading = false
             return res
         },
 
-        gen_buy_tok_usd_sum(){
-            
+        gen_buy_tok_usd_sum() {
+
             this.buy_tok.usd_sum = this.buy_tok.tok_sum * this.buy_tok.tok_price;
-            this.buy_tok.usd_sum = (this.buy_tok.usd_sum + this.buy_tok.usd_sum/100 * this.buy_tok.buy_fee).toFixed(2)
+            this.buy_tok.usd_sum = (this.buy_tok.usd_sum + this.buy_tok.usd_sum / 100 * this.buy_tok.buy_fee)
+                .toFixed(2)
         },
-        
-        buy_tok_ask(){
-            if(this.buy_tok.bal_tok >=1){return;}
-            Swal.fire({
-                    title: ``,
-                    html: `<h3><?=lang('txt165_23')?></h3>`,
-                    showCancelButton: true,
-                    confirmButtonText: '<?=lang('txt103')?>',
-                    cancelButtonText: '<?=lang('txt104')?>',
-                }).then((result) => {
-                    if (result.value) {
-                        //$('#buy_tok_form').submit();
-                        this.buy_send()
-                    }
-                })
+
+        buy_tok_ask() {
+            if (this.buy_tok.bal_tok >= 1) {
                 return;
+            }
+            Swal.fire({
+                title: ``,
+                html: `<h3><?=lang('txt165_23')?></h3>`,
+                showCancelButton: true,
+                confirmButtonText: '<?=lang('txt103')?>',
+                cancelButtonText: '<?=lang('txt104')?>',
+            }).then((result) => {
+                if (result.value) {
+                    //$('#buy_tok_form').submit();
+                    this.buy_send()
+                }
+            })
+            return;
         },
 
         async buy_send() {
@@ -430,7 +408,7 @@ var app = new Vue({
         },
 
     },
-    async mounted(){
+    async mounted() {
         await this.update()
         this.buy_tok.tok_sum = 1
         this.gen_buy_tok_usd_sum()
@@ -440,8 +418,6 @@ var app = new Vue({
     },
 
 })
-
-
 </script>
 
 </body>

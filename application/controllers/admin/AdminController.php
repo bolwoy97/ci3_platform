@@ -131,11 +131,13 @@ class AdminController extends MY_Controller {
 		$this->auth_serv->check($this->user['is_tester']>=1,'home');
 		//корп токены
 		$this->res['stage_tok_usd_sum'] =0; 
+		$this->res['stage_tok_sum'] =0; 
 		$tok_price = $this->db->get_where('options', ['name'=>'tok_price'])->row_array()['value'];
 		$this->res['tok_price'] = $tok_price;
 		$stages = $this->db->where(['price <='=>$tok_price])->get('stages')->result_array();
 		foreach ($stages as $key => $stage) {
 			$this->res['stage_tok_usd_sum'] += round( $stage['price']*($stage['max_stage_tok']-$stage['stage_tok']),2);
+			$this->res['stage_tok_sum'] += $stage['max_stage_tok']-$stage['stage_tok'];
 		}		
 
 		$this->res['open_fee_sum'] = round($this->db->select_sum('sum')->where_in('type', ['fee_ord_open', 'fee_buy_tok'])->get('operations')->row_array()['sum'],2);

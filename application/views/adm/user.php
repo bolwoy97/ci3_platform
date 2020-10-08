@@ -269,6 +269,62 @@
                         <div class="card mg-b-30">
                             <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="card-header-title tx-13 mb-0 text-uppercase">Orders GPS
+                                    </h6>
+                                    <div class="text-right">
+                                        <div class="d-flex">
+                                            <div class="dropdown" data-toggle="dropdown">
+                                                <a href=""><i class="ti-more-alt"></i></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a href="" class="dropdown-item"><i data-feather="info"
+                                                            class="wd-16 mr-2"></i>Details</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body pd-0">
+                                <div class="data-table">
+                                    <table id="basicDataTable5" class="table hover responsive display nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>Type </th>
+                                                <th>GPS </th>
+                                                <th>Buy Date</th>
+                                                <th>buy price</th>
+                                                <th>buy sum</th>
+                                                <th>sell Date</th>
+                                                <th>sell price</th>
+                                                <th>sell sum</th>
+                                                <th>status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?foreach($orders_tok2 as $k => $order){?>
+                                            <tr>
+                                                <td><?=$order['show_type']?></td>
+                                                <td><?=$order['buy_tok']?></td>
+                                                <td><?=$order['buy_date']?></td>
+                                                <td><?=$order['buy_price']?></td>
+                                                <td><?=$order['buy_usd']?></td>
+                                                <td><?=$order['sell_date']?></td>
+                                                <td><?=$order['sell_price']?></td>
+                                                <td><?=$order['sell_usd']?></td>
+                                                <td><?=$order['status']?></td>
+                                            </tr>
+                                            <?}?>
+
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mg-b-30">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
                                     <h6 class="card-header-title tx-13 mb-0 text-uppercase">Additions</h6>
                                     <div class="text-right">
                                         <div class="d-flex">
@@ -557,6 +613,14 @@
         });
 
         $('#basicDataTable4').DataTable({
+            responsive: true,
+            language: {
+                searchPlaceholder: 'Search...',
+                sSearch: ''
+            }
+        });
+
+        $('#basicDataTable5').DataTable({
             responsive: true,
             language: {
                 searchPlaceholder: 'Search...',

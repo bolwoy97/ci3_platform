@@ -51,8 +51,8 @@
 		<!-- DATA TABLE CSS -->
 		<link href="assets/plugins/datatable/dataTables.bootstrap4.min.css" rel="stylesheet"/>
 
-
-
+		<!-- CUSTOM SCROLL CSS -->
+		<link href="assets\custom\css\scroll.css" rel="stylesheet"/>
 
 		<script charset="UTF-8" src="//web.webpushs.com/js/push/ab80e031ad5b45375b8b2b2ed39f9d7b_1.js" async></script>
 

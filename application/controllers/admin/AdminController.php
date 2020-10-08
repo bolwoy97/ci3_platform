@@ -65,6 +65,7 @@ class AdminController extends MY_Controller {
 	{
 		$this->auth_serv->check($this->user['is_tester']>=1,'home');
 		$this->load->model('user_mod');
+		$this->load->model('order_mod');
 		$this->load->model('serv/oper_serv');
 
 		$this->load->model('user_mod');
@@ -73,6 +74,9 @@ class AdminController extends MY_Controller {
 		
 		$this->res['tok_buys'] = $this->db->where([ 'type'=>'buy_tok','user'=>$user['id'] ])->get('orders')->result_array();
 		$this->res['orders'] = $this->db->where(['type !='=>'buy_tok', 'user'=>$user['id']])->get('orders')->result_array();
+		$this->res['orders_tok2'] = $this->db->where(['user'=>$user['id']])->where_in('type',['tok2','tok2_buy'])->get('orders')->result_array();
+		$this->res['orders_tok2'] = $this->order_mod->get_show_types($this->res['orders_tok2']);
+		//var_dump($this->res['orders_tok2']);exit;
 		$this->res['adds'] = $this->db->where(['user'=>$user['id']])->like('type','add_')->get('operations')->result_array();
 		$this->res['withs'] = $this->db->where(['user'=>$user['id'], 'type'=>'with', 'status >'=>0])->get('operations')->result_array();
 		$this->res['withs'] = $this->oper_serv->get_statuses($this->res['withs']);

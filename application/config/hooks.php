@@ -41,6 +41,8 @@ $hook['pre_system'][] = array(
     //'params'   => array('beer', 'wine', 'snacks')
     );
 
+  
+
 $hook['post_controller_constructor'][] = array(
         'class'    => 'Lang',
         'function' => 'get_lang',

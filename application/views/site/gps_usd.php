@@ -20,7 +20,7 @@
                 <h5 class="card-title"><?=lang('txt69')?></h5>
             </div>
             <div class="card-body">
-                <div class="table-responsive content vscroll h-300">
+                <div class="table-responsive content h-300">
                     <table class="table card-table table-vcenter text-center">
                     <thead>
                             <tr>
@@ -37,10 +37,10 @@
                                 <th>{{order.buy_tok}}YRD</th>
                                 <th class="text-">{{(order.buy_tok*order.buy_price).toFixed(2)}}USD</th></small>
                             </tr>
-                            <tr v-if="all_orders.length >= 10">
+                            <tr v-if="all_orders.length >= 100">
                                 <th></th>
                                 <th><button type="button" class="btn btn-info  btn-sm mb-1"
-                                        v-on:click="orders_list.lim += 100;"><?=lang('txt79')?></button></th>
+                                        v-on:click="limits.all_orders += 100;"><?=lang('txt79')?></button></th>
                             </tr>
                         </tbody>
                     </table>
@@ -70,7 +70,7 @@
                 <div class="panel-body tabs-menu-body">
                     <div class="tab-content">
                         <div class="tab-pane active " id="my_orders">
-                            <div class="table-responsive content vscroll h-600">
+                            <div class="table-responsive content h-600">
                                 <table class="table card-table table-vcenter text-center" >
                                     <thead>
                                         <tr>
@@ -88,15 +88,15 @@
                                             <th>{{user_order.show_type}}</th>
                                             <th>{{user_order.buy_tok}} YRD</th>
                                             <th>{{user_order.sell_price}}</th>
-                                            <th>{{user_order.buy_tok*user_order.sell_price}} USD</th>
+                                            <th>{{(user_order.buy_tok*user_order.sell_price).toFixed(2)}} USD</th>
                                             <th>{{user_order.sell_usd}} USD</th>
 
                                         </tr>
-                                        <tr v-if="user_orders.length >= 10">
+                                        <tr v-if="user_orders.length >= 100">
                                             <th>
                                             </th>
                                             <th><button type="button" class="btn btn-info  btn-sm mb-1"
-                                                    v-on:click="user_orders_list.lim += 100;"><?=lang('txt79')?></button>
+                                            v-on:click="limits.user_orders += 100;"><?=lang('txt79')?></button>
                                             </th>
                                         </tr>
                                     </tbody>
@@ -104,7 +104,7 @@
                             </div>
                         </div>
                         <div class="tab-pane " id="all_orders">
-                            <div class="table-responsive content vscroll h-600">
+                            <div class="table-responsive content h-600">
                                 <table class="table card-table table-vcenter text-center" >
                                     <thead>
                                         <tr>
@@ -119,10 +119,10 @@
                                             <th>{{stage.sell_tok}} GPS</th>
                                             <th class="text-">{{(stage.sell_tok*stage.price).toFixed(2)}} USD</th>
                                         </tr>
-                                        <tr v-if="stages_tok2.length >= 10">
+                                        <tr v-if="stages_tok2.length >= 100">
                                             <th></th>
                                             <th><button type="button" class="btn btn-info  btn-sm mb-1"
-                                                    v-on:click=""><?=lang('txt79')?></button>
+                                            v-on:click="limits.stages_tok2 += 100;"><?=lang('txt79')?></button>
                                             </th>
                                         </tr>
                                     </tbody>
@@ -131,7 +131,7 @@
                            
                         </div>
                         <div class="tab-pane " id="my_history">
-                            <div class="table-responsive content vscroll h-600">
+                            <div class="table-responsive content  h-600">
                                 <table class="table card-table table-vcenter text-center" >
                                     <thead>
                                         <tr>
@@ -152,10 +152,10 @@
                                             <th>{{closed_order.buy_tok*closed_order.sell_price}} USD</th>
                                             <th>{{closed_order.sell_usd}} USD</th>
                                         </tr>
-                                        <tr v-if="user_closed_orders.length >= 10">
+                                        <tr v-if="user_closed_orders.length >= 100">
                                             <th></th>
                                             <th><button type="button" class="btn btn-info  btn-sm mb-1"
-                                                    v-on:click="user_closed_orders_list.lim += 100;"><?=lang('txt79')?></button>
+                                            v-on:click="limits.user_closed_orders += 100;"><?=lang('txt79')?></button>
                                             </th>
                                         </tr>
                                     </tbody>
@@ -167,6 +167,8 @@
             </div>
         </div>
     </div>
+    <?if($this_user['is_tester'] || $this_user['is_suser']){?>
+    <?}?>
     <div class="col-md-12 col-lg-4">
         <div class="card card-body">
             <div class="panel panel-primary">
@@ -230,8 +232,11 @@
                                 <div v-if="buy_errors">
                                     <p v-for="error in buy_errors" class="alert alert-warning">{{error}}</p>
                                 </div>
-                                <button type='button' v-on:click="buy_ask()"
+                                <?if($this_user['info']['tok_bal']>=1){?>
+                                    <button type='button' v-on:click="buy_ask()"
                                     class="btn btn-primary mt-4 btn-block"><?=lang('txt101')?> GPS</button>
+                                <?}?>
+                                
                             </div>
                         </div>
                         <div class="tab-pane " id="sell">
@@ -248,8 +253,10 @@
                                              <span class=" badge badge-dark badge-pill"> ?</span></span></label>
                                     <div class="row gutters-xs">
                                         <div class="col-6">
+                                        
                                             <input type="number" min="0.01" step="0.01" v-model="sell_price" @input="gen_sell_usd()"
-                                                class="form-control " placeholder="0">
+                                            <?if($this_user['info']['tok_bal']<1){?> readonly <?}?>    class="form-control " placeholder="0">
+                                        
                                         </div>
                                         <div class="col-6">
                                             <input type="text" class="form-control is-valid"
@@ -292,8 +299,10 @@
                                 <div v-if="sell_errors">
                                     <p v-for="error in sell_errors" class="alert alert-warning">{{error}}</p>
                                 </div>
+                                <?if($this_user['info']['tok_bal']>=1){?>
                                 <button type='button' v-on:click="sell_ask()"
                                     class="btn btn-danger mt-4 btn-block"><?=lang('txt217')?> GPS</button>
+                                <?}?>
                             </div>
                         </div>
                     </div>
@@ -302,6 +311,7 @@
         </div>
 
     </div><!-- COL END -->
+   
 </div>
 <!-- ROW-4 END -->
 </div>
@@ -338,6 +348,13 @@ var app = new Vue({
             stages_tok2: {},
 
             rate_chart:false,
+
+            limits:{
+                all_orders: 100,
+                user_orders: 100,
+                user_closed_orders: 100,
+                stages_tok2: 100,
+            },
         }
     },
     methods: {
@@ -351,12 +368,17 @@ var app = new Vue({
                 buy_price: this.tok2_price,
                 sell_tok: this.sell_tok,
                 sell_price: this.sell_price,
-
+                limits: this.limits,
                 get_chart: (!this.rate_chart)?1:0, 
 
             })
             //console.log(res)
 
+            if(typeof res.update_timeout !== 'undefined'){
+                setTimeout(() => {
+                    this.update()
+                }, res.update_timeout);
+            }
             
             this.user_bal_usd = res.user_bal_usd
             this.user_bal_tok2 = res.user_bal_tok2
@@ -379,8 +401,8 @@ var app = new Vue({
                 this.rate_chart = false;
             }
             
-
             this.tok2_price = res.tok2_price
+
 
             this.loading = false
             return res
@@ -420,6 +442,7 @@ var app = new Vue({
                 buy_tok: this.buy_tok,
                 buy_price: this.tok2_price,
             })
+            
             //console.log(res)
             if (res.errors) {
                 Swal.fire({
@@ -432,12 +455,14 @@ var app = new Vue({
                     html: `<h3>${res.success.join('<br>')} </h3>`,
                 })
             }
+
+            this.buy_tok = 0
             //this.update()
         },
 
         gen_sell_usd() {
             this.sell_usd = (this.sell_tok * this.sell_price).toFixed(2)
-            this.sell_usd_fee = (this.sell_usd - this.sell_usd / 100 * 10).toFixed(2)
+            this.sell_usd_fee = (this.sell_usd - this.sell_usd / 100 * 5).toFixed(2)
         },
 
         sell_ask() {
@@ -477,6 +502,9 @@ var app = new Vue({
                     html: `<h3>${res.success.join('<br>')} </h3>`,
                 })
             }
+
+            this.sell_tok = 0
+            this.sell_price = 0
             //this.update()
         },
 
@@ -501,7 +529,7 @@ var app = new Vue({
         this.build_chart()*/
         setInterval(() => {
             this.update()
-        }, 2000);
+        }, 20000);
         
     },
 

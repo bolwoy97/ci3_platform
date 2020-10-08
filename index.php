@@ -1,4 +1,7 @@
 <?php
+
+//require_once('application/views/land/index_old.php');exit;
+
 /**
  * CodeIgniter
  *
@@ -316,5 +319,6 @@ switch (ENVIRONMENT)
  *
  * And away we go...
  */
+
 require_once BASEPATH.'core/CodeIgniter.php';
 

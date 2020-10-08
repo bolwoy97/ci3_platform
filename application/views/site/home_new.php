@@ -26,7 +26,7 @@
                 <h5 class="card-title"><?=lang('txt69')?></h5>
             </div>
             <div class="card-body">
-                <div class="table-responsive content vscroll h-300">
+                <div class="table-responsive content h-300">
                     <table class="table card-table table-vcenter text-center">
                         <thead>
                             <tr>
@@ -76,7 +76,7 @@
                 <div class="panel-body tabs-menu-body">
                     <div class="tab-content">
                         <div class="tab-pane active " id="tab5">
-                            <div class="table-responsive content vscroll h-600">
+                            <div class="table-responsive content h-600">
                                 <table class="table card-table table-vcenter text-center" id="user_orders_list">
                                     <thead>
                                         <tr>
@@ -112,7 +112,7 @@
                             
                         </div>
                         <div class="tab-pane " id="tab6">
-                            <div class="table-responsive content vscroll h-600">
+                            <div class="table-responsive content h-600">
                                 <table class="table card-table table-vcenter text-center" id="stages_list">
                                     <thead>
                                         <tr>
@@ -139,7 +139,7 @@
                            
                         </div>
                         <div class="tab-pane " id="tab7">
-                            <div class="table-responsive content vscroll h-600">
+                            <div class="table-responsive content h-600">
                                 <table class="table card-table table-vcenter text-center" id="user_closed_orders_list">
                                     <thead>
                                         <tr>
@@ -234,7 +234,7 @@
                                     step="0.01" class="form-control " placeholder="0">
                             </div>
                             <div class="col-6">
-                                <input type="text" class="form-control  " :placeholder="inputs.buy_usd_and_fee"
+                                <input type="text" class="form-control " :placeholder="inputs.buy_usd_and_fee"
                                     readonly>
                                 <label title="<?=lang('txt89')?>"><small><?=lang('txt90')?>: {{user_bal_usd}}$ <span
                                             class=" badge badge-dark badge-pill"> ?</span></small></label>
@@ -666,7 +666,7 @@ new Vue({
 
         setInterval(() => {
             get_update()
-        }, 2000);
+        }, 20000);
     });
 
     var loading = false;
@@ -689,6 +689,11 @@ new Vue({
 
             })
             //console.log(res)
+            if(typeof res.update_timeout !== 'undefined'){
+                setTimeout(() => {
+                    get_update()
+                }, res.update_timeout);
+            }
             
             buy_order.user_bal_usd = res.user_bal_usd
             buy_order.buy_stage = res.buy_stage
@@ -699,6 +704,8 @@ new Vue({
             user_orders_list.user_orders = res.user_orders_list;
             stages_list.stages = res.stages_list;
             user_closed_orders_list.closed_orders = res.user_closed_orders_list;
+
+            
 
             loading = false
             return res

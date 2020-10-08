@@ -249,7 +249,10 @@ class OrderController extends CI_Controller {
 		$dtime = date("Y-m-d H:i:s");
 		$rec = json_decode(file_get_contents('php://input'), true);//$_POST;//
 		//echo json_encode(['success'=>['sell_price'.$rec['sell_price']]]);exit;
-		$user = $this->auth_serv->loged_in(true,true);
+		//$user = $this->auth_serv->loged_in(true,true);
+		$user = $this->auth_serv->loged_in(true,false);
+		$this->load->model('user_mod');
+		$user = $this->user_mod->get_info($user['id']);
 		$tok2_price = $this->db->get_where('courses', ['cur'=>'tok2'])->row_array()['sum_usd'];
 		$res = array();
 
@@ -275,7 +278,7 @@ class OrderController extends CI_Controller {
 			$sell_tok = $rec['sell_tok'];
 
 			//сколько токена в итоге куплено
-			$sell_usd = round($sell_tok * $sell_stage['price'] /100*(100 - $GLOBALS['env']['order_close_fee']),2);
+			$sell_usd = round($sell_tok * $sell_stage['price'] /100*(100 - $GLOBALS['env']['order_tok2_close_fee']),2);
 
 			$this->db->set('bal_tok2', 'bal_tok2-'.$sell_tok, FALSE)->where('id', $user['id'])->update('users');
 			$this->db->set('cur_tok', 'cur_tok+'.$sell_tok, FALSE)->where('id', $sell_stage['id'])->update('stages_tok2');

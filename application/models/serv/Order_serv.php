@@ -84,6 +84,7 @@ class order_serv extends CI_Model
 	public function validate_buy_tok2_order($rec, $user, $tok_price, $buy_stage)
     {
         try {
+			//throw new Exception('', 1);
 			if($user['info']['tok_bal']<1){
 				throw new Exception(lang('txt229'), 1);
 			}
@@ -114,7 +115,11 @@ class order_serv extends CI_Model
 	public function validate_sell_tok2_order($rec, $user, $tok_price, $sell_stage)
     {
         try {
-			
+			//throw new Exception('', 1);
+			if($user['info']['tok_bal']<1){
+				throw new Exception(lang('txt229'), 1);
+			}
+
 			if($rec['sell_tok']<=0){
 				throw new Exception(lang('txt190')." 0 ", 1);
 			}
@@ -129,6 +134,7 @@ class order_serv extends CI_Model
 				throw new Exception(lang('txt191')." >= $min_sell_price USD ", 1);
 			}*/
 			$min_sell_price = $sell_stage['price'];
+			//log_message('error', " min sell price comp {$rec['sell_price']}  -- $min_sell_price");
 			if($rec['sell_price'] != $min_sell_price) {
 				//$res['errors'][] = "Ближайшая доступная цена продажи = $".$sell_stage['price'];
 				throw new Exception(lang('txt191')." >= $min_sell_price USD ", 1);
@@ -170,6 +176,11 @@ class order_serv extends CI_Model
 	public function buy_from_users($buy_tok, $buy_price, $type='main')
     {
 		//ишем пользовательские ордера для покупки по текущему курсу из них
+		if($type=='main'){
+			$order_close_fee = $GLOBALS['env']['order_close_fee'];
+		}else{
+			$order_close_fee = $GLOBALS['env']['order_tok2_close_fee'];
+		}
 		$user_orders = $this->db->where([
 			'type'=>$type,
 			'sell_price'=>$buy_price,
@@ -205,8 +216,8 @@ class order_serv extends CI_Model
 
 					$operation = array(
 						'type' => 'fee_ord_close' ,'user' => $order_owner['id'],'date' => $dtime,
-						'sum' => $order['sell_usd']/(100-$GLOBALS['env']['order_close_fee'])*$GLOBALS['env']['order_close_fee'],
-						'cur' => 'usd','rate' => $GLOBALS['env']['order_close_fee'],'detail'=> $order['type'] , 'adr' => $order['id'],
+						'sum' => $order['sell_usd']/(100-$order_close_fee)*$order_close_fee,
+						'cur' => 'usd','rate' => $order_close_fee,'detail'=> $order['type'] , 'adr' => $order['id'],
 					);
 					$this->db->insert('operations', $operation);
 					

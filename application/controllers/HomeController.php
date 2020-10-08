@@ -7,11 +7,17 @@ class HomeController extends MY_Controller {
 
 	public function __construct()
 	{
+		
 		parent::__construct();
+		
 		//$this->output->enable_profiler(TRUE);
 		$this->load->model('user_mod');
 		$this->load->model('serv/auth_serv');
-		$this->user = $this->auth_serv->loged_in(true,true);
+		//$this->user = $this->auth_serv->loged_in(true,true);
+		$this->user = $this->auth_serv->loged_in(true,false);
+		$this->load->model('user_mod');
+		$this->user = $this->user_mod->get_info($this->user['id']);
+
 		if($this->user['is_grid']==1){
 			redirect(base_url().'set_login');
 		}
@@ -31,6 +37,7 @@ class HomeController extends MY_Controller {
 
 	public function gps_usd()
 	{
+		
 		$this->load->view('site/gps_usd',$this->res);return;
 		if($this->user['is_tester']>=1){
 			//$this->session->set_flashdata('warning',['Tester version']);

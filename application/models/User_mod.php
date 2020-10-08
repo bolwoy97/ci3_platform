@@ -211,7 +211,7 @@ class user_mod extends MY_Model
 
     public function get_tok_status($tok_sum)
     {
-        return ($tok_sum>0)?'Trader':'Member';
+        return ($tok_sum>=1)?'Trader':'Member';
     }
 
     public function get_info($id)

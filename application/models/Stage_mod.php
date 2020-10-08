@@ -86,16 +86,19 @@ class stage_mod extends MY_Model
 
 	public function find_or_fill_tok2($price,$tok2_price)
     {
+		//log_message('error', 'find_or_fill_tok2 '.$price.' '.$tok2_price);
 		$up_tok2_price = round($tok2_price+$tok2_price/100*$GLOBALS['env']['sell_price_min_profit'],2);
-		$cur_p = max([0.3, $up_tok2_price]);
+		$cur_p = 0.3;
+		//$cur_p = max([0.3, $up_tok2_price]);
 		$sell_stage = $this->get_or_create_tok2($cur_p);
 
-		while($cur_p<$price || $sell_stage['max_tok']-$sell_stage['cur_tok'] <=0 ){
+		while($cur_p<$up_tok2_price || $cur_p<$price || $sell_stage['max_tok']-$sell_stage['cur_tok'] <=0 ){
 			if($cur_p<1){
 				$next_price = round($cur_p+0.01,4);
 			}else{
 				$next_price = round($cur_p/100*101,4);
 			}
+			//log_message('error', '$next_price = '.$next_price);
 			$sell_stage = $this->get_or_create_tok2($next_price);
 			$cur_p = $sell_stage['price'];
 		}
@@ -109,7 +112,8 @@ class stage_mod extends MY_Model
 		*/
         $sell_stage = $this->db->get_where('stages_tok2',['price'=>$price])->row_array();
 			if(empty($sell_stage)){ //если нет этапа - создаем
-				$max_tok = 300/$price;
+				$equivalent = $this->tok2_usd_equivalent($price);
+				$max_tok = $equivalent/$price;
 				$stage_tok = $max_tok/100*10;
 				$insert_stage = [
 					'price'=>$price,
@@ -131,6 +135,19 @@ class stage_mod extends MY_Model
 			$stages[$k]['sell_tok'] = $stage['cur_tok'] + $stage['stage_tok'];
 		}
 		return $stages;
+	}
+
+	public function tok2_usd_equivalent($price)
+    {
+		//$equivalent = 200;
+		if($price>=1.0 && $price<3.0){
+			$equivalent = 400;
+		}elseif ($price>=3.0 && $price<4.0) {
+			$equivalent = 300;
+		}elseif ($price>=4.0 ) {
+			$equivalent = 200;
+		}
+		return$equivalent;
 	}
 
 }

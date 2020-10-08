@@ -186,4 +186,20 @@ class SeedController extends CI_Controller {
 		echo $query;
 	}
 
+	public function get_bal_usd_by_journal()
+	{///tools/SeedController/get_bal_usd_by_journal
+		/*
+		SELECT SUM(sum) FROM `operations` WHERE user = 418 AND type LIKE '%add%' 
+		SELECT SUM(buy_usd) FROM `orders` WHERE user = 418 
+		SELECT SUM(sum) FROM `operations` WHERE user = 418 AND type = 'trans'
+		*/
+		$id = 418 ;
+		$add = round($this->db->select_sum('sum')->where('user',$id)->like('type', 'add_')->get('operations')->row_array()['sum'],2);
+		$orders = round($this->db->select_sum('buy_usd')->where('user',$id)->get('orders')->row_array()['buy_usd'],2);
+		$trans = round($this->db->select_sum('sum')->where(['user'=>$id, 'type'=>'trans'])->get('operations')->row_array()['sum'],2);
+		echo "0 + $add - $orders + $trans <br>";
+		echo $add - $orders + $trans;
+
+	}
+
 }

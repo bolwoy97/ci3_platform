@@ -5,7 +5,7 @@
 
 <div class="row row-desc">
 
-    <div class="col-md-12 col-lg-4">
+    <?/**/?><div class="col-md-12 col-lg-4">
         <div class="card">
             <div class="card-body">
 
@@ -147,7 +147,7 @@
                 <div class="panel-body tabs-menu-body">
                     <div class="tab-content">
                         <div class="tab-pane active " id="tab5">
-                            <div class="table-responsive content vscroll h-600">
+                            <div class="table-responsive content h-600">
                                 <table class="table card-table table-vcenter ">
                                     <thead>
                                         <tr>
@@ -171,7 +171,8 @@
 
                         </div>
                         <div class="tab-pane " id="tab6">
-                            <div class="table-responsive content vscroll h-600">
+                        <!-- <div class="table-responsive content h-600"> -->
+                            <div class="table-responsive content h-600">
                                 <table class="table card-table table-vcenter ">
                                     <thead>
                                         <tr>
@@ -194,7 +195,7 @@
                         </div>
                         
                         <div class="tab-pane " id="tab7">
-                            <div class="table-responsive content vscroll h-600">
+                            <div class="table-responsive content  h-600">
                                 <table class="table card-table table-vcenter " >
                                     <thead>
                                         <tr>
@@ -221,7 +222,7 @@
                         </div>
 
                         <div class="tab-pane" id="tab8">
-                            <div class="table-responsive content vscroll h-600">
+                            <div class="table-responsive content h-600">
                                 <table class="table card-table table-vcenter ">
                                     <thead>
                                         <tr>
@@ -261,7 +262,7 @@
 
 <script>
 $(function() {
-    $("#add_subm").on("click", function(e) {
+    $("#add_subm").on("click", function(e){
         var cur = $('#add_cur').val();
         var sum = $('#add_sum').val();
         if (cur == 'fchng') {
@@ -340,7 +341,12 @@ var app = new Vue({
 
             })
             //console.log(res)
-
+            if(typeof res.update_timeout !== 'undefined'){
+                setTimeout(() => {
+                    this.update()
+                }, res.update_timeout);
+            }
+            
             this.buy_tok.tok_price = res.tok_price
             this.buy_tok.bal_tok = res.user_tok_bal
             this.buy_tok.user_status = res.user_status
@@ -414,7 +420,7 @@ var app = new Vue({
         this.gen_buy_tok_usd_sum()
         setInterval(() => {
             this.update()
-        }, 3000);
+        }, 20000);
     },
 
 })
